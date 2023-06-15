@@ -1,49 +1,76 @@
 package restaurantmenu;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Objects;
+
 public class MenuItem {
-    private String courseName;
-    private double price;
-    private String courseDescription;
+    private final int DAYS_NEW = 30;
+    private String name;
+    private Double price;
     private String category;
-    private boolean isNew;
+    private String description;
 
-    public String getCourseName() {
-        return courseName;
+    private LocalDate dateAdded = LocalDate.now();
+
+    public MenuItem(String aName, Double aPrice, String aCategory, String aDescription) {
+        this.name = aName;
+        this.price = aPrice;
+        this.category = aCategory;
+        this.description = aDescription;
     }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
+    public String getName() {
+        return this.name;
     }
-
-    public double getPrice() {
-        return price;
+    public Double getPrice() {
+        return this.price;
     }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public String getCourseDescription() {
-        return courseDescription;
-    }
-
-    public void setCourseDescription(String courseDescription) {
-        this.courseDescription = courseDescription;
-    }
-
     public String getCategory() {
-        return category;
+        return this.category;
+    }
+    public String getDescription() {
+        return this.description;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    private void setName(String newName) {
+        this.name = newName;
+    }
+    private void setPrice(Double newPrice) {
+        this.price = newPrice;
+    }
+    public void setCategory(String newCategory) {
+        this.category = newCategory;
+    }
+    public void setDescription(String newDescription) {
+        this.description = newDescription;
+    }
+    public boolean checkIfNew() {
+        LocalDate today = LocalDate.now();
+        long datesBetween = ChronoUnit.DAYS.between(dateAdded,today);
+        if (datesBetween > DAYS_NEW) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
-    public boolean isNew() {
-        return isNew;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MenuItem)) return false;
+        MenuItem menuItem = (MenuItem) o;
+        return Objects.equals(name, menuItem.name) && Objects.equals(price, menuItem.price);
     }
 
-    public void setNew(boolean aNew) {
-        isNew = aNew;
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, price);
+    }
+    @Override
+    public String toString() {
+        return name + " - " + price + " (" + category + ") " + "/n"+description;
+    }
+    public void printMenuItem() {
+        System.out.println(this.toString());
     }
 }
