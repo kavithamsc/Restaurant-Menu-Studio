@@ -1,76 +1,102 @@
 package restaurantmenu;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.Objects;
+
+
+import java.util.Calendar;
+import java.util.Currency;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class MenuItem {
-    private final int DAYS_NEW = 30;
     private String name;
-    private Double price;
-    private String category;
+    private double price;
     private String description;
+    private Enum category;
+    private boolean newItem = false;
+    private Date updated;
 
-    private LocalDate dateAdded = LocalDate.now();
+    public MenuItem(double price, String description, Enum category, boolean newItem, Date updated, String name) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.category = category;
+        this.newItem = newItem;
+        this.updated = updated;
+    }
 
-    public MenuItem(String aName, Double aPrice, String aCategory, String aDescription) {
-        this.name = aName;
-        this.price = aPrice;
-        this.category = aCategory;
-        this.description = aDescription;
+    public double getPrice() {
+        return price;
     }
-    public String getName() {
-        return this.name;
+
+    public void setPrice(double price) {
+        this.price = price;
     }
-    public Double getPrice() {
-        return this.price;
-    }
-    public String getCategory() {
-        return this.category;
-    }
+
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
-    private void setName(String newName) {
-        this.name = newName;
+    public void setDescription(String description) {
+        this.description = description;
     }
-    private void setPrice(Double newPrice) {
-        this.price = newPrice;
+
+    public Enum getCategory() {
+        return category;
     }
-    public void setCategory(String newCategory) {
-        this.category = newCategory;
+
+    public void setCategory(Enum category) {
+        this.category = category;
     }
-    public void setDescription(String newDescription) {
-        this.description = newDescription;
+
+    public boolean isNewItem() {
+        return newItem;
     }
-    public boolean checkIfNew() {
-        LocalDate today = LocalDate.now();
-        long datesBetween = ChronoUnit.DAYS.between(dateAdded,today);
-        if (datesBetween > DAYS_NEW) {
-            return false;
+
+    public void setNewItem(boolean newItem) {
+        this.newItem = newItem;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String toString() {
+        return name + "\n" + (isNewItem() ? "new!!" + "\n" : "")  +  "price: " + price + "\n" + "desc: " + description  + "\n" + "category: " + category;
+    }
+
+    public void determineNew() {
+        Date today = new Date();
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(today);
+        cal.add(Calendar.DAY_OF_MONTH, -30);
+        Date today30 = cal.getTime();
+
+        if (this.updated.after(today30)) {
+            this.newItem = true;
         } else {
-            return true;
+            this. newItem = false;
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof MenuItem)) return false;
-        MenuItem menuItem = (MenuItem) o;
-        return Objects.equals(name, menuItem.name) && Objects.equals(price, menuItem.price);
+    public boolean equals(MenuItem comparison) {
+        if (comparison == this) {
+            return true;
+        }
+
+        if (comparison == null) {
+            return false;
+        }
+
+        if (comparison.getClass() != getClass()) {
+            return false;
+        }
+
+        MenuItem theItem = (MenuItem) comparison;
+        return theItem.getDescription() == getDescription();
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, price);
-    }
-    @Override
-    public String toString() {
-        return name + " - " + price + " (" + category + ") " + "/n"+description;
-    }
-    public void printMenuItem() {
-        System.out.println(this.toString());
-    }
 }

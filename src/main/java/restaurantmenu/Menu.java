@@ -1,104 +1,55 @@
 package restaurantmenu;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.HashMap;
 
-public class MenuItem {
-    private String courseName;
-    private double price;
-    private String courseDescription;
-    private String category;
-    private boolean isNew;
-    private dateUpdated;
+public class Menu {
+    private ArrayList<MenuItem> menuItems;
+    private Date lastUpdated;
 
-    public MenuItem(String courseName) {
-        this.courseName = courseName;
+    public Menu(ArrayList<MenuItem> menuItems, Date lastUpdated) {
+        this.menuItems = menuItems;
+        this.lastUpdated = lastUpdated;
     }
 
-    public MenuItem() {
+
+    public void updateMenu(MenuItem menuItem, String action) {
+        if (action == "add") {
+            menuItems.add(menuItem);
+        } else if (action == "remove") {
+            menuItems.remove(menuItem);
+        } else {
+            System.out.println("Not an accepted input: please include to either 'add' or 'remove' ");
+        }
+        lastUpdated =  new Date();
     }
 
-    public String getCourseName() {
-        return courseName;
-    }
 
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
+    public void printItems(ArrayList menuItems, int index) {
+//        if (index > menuItems.size()) {
+//            System.out.println("enter a valid index to print an item");
+//            return;
+//        }
 
-    public double getPrice() {
-        return price;
-    }
+        if (index >= menuItems.size()) {
+            System.out.println("***" + "\n");
+            for (MenuItem anItem : this.menuItems) {
+                System.out.println("item: " + anItem.toString() + "\n");
+            }
+            System.out.println("***");
+        } else {
+            MenuItem item = (MenuItem) menuItems.get(index);
+            //test our determineNew method
+//            System.out.println("item " + index + " pre determine: " + item.isNewItem());
+//            item.determineNew();
+//            System.out.println("item " + index + "post determine: " + item.isNewItem());
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+            System.out.println("item: " + item.toString() + "\n");
 
-    public String getCourseDescription() {
-        return courseDescription;
-    }
 
-    public void setCourseDescription(String courseDescription) {
-        this.courseDescription = courseDescription;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public boolean isNew() {
-        return isNew;
-    }
-
-    public void setNew(boolean aNew) {
-        isNew = aNew;
-    }
-
-    public MenuItem(boolean isNew) {
-        this.isNew = isNew;
-    }
-
-    public void determineNew() {
-        Date today = new Date();
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(today);
-        cal.add(Calendar.DAY_OF_MONTH, -30);
-        Date today30 = cal
-    }
-
-    public static void main(String[] args) {
-        MenuItem item1 = new MenuItem();
-        item1.setCourseName("Pasta");
-        item1.setPrice(10.99);
-        item1.setCourseDescription("Delicious pasta with chicken, beef, seafood");
-        item1.setCategory("Main Course");
-        item1.setNew(true);
-
-        MenuItem item2 = new MenuItem();
-        item2.setCourseName("Salad");
-        item2.setPrice(8.99);
-        item2.setCourseDescription("Delicious salad with your choice chicken, beef, seafood ");
-        item2.setCategory("Main Course");
-        item2.setNew(true);
-
-        MenuItem item3 = new MenuItem();
-        item3.setCourseName("Cheesecake");
-        item3.setPrice(7.99);
-        item3.setCourseDescription("Creamy cheesecake with a graham cracker crust");
-        item3.setCategory("Dessert");
-        item3.setNew(true);
-
-        // Create a menu and add items to it
-        ArrayList<MenuItem> menuItems = new ArrayList<>();
-        menuItems.add(item1);
-        menuItems.add(item2);
-        menuItems.add(item3);
+        }
 
     }
 }
+
